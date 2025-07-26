@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>语文知识要点卡片展示</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Noto Serif SC', serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%);
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            padding: 40px 0;
+            margin-bottom: 30px;
+        }
+        
+        h1 {
+            font-size: 2.8rem;
+            color: #2c3e50;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 15px;
+            position: relative;
+            display: inline-block;
+        }
+        
+        h1:after {
+            content: '';
+            display: block;
+            width: 80%;
+            height: 4px;
+            background: linear-gradient(to right, transparent, #3498db, transparent);
+            margin: 10px auto;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            color: #7f8c8d;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .cards-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            padding: 20px;
+        }
+        
+        .card {
+            perspective: 1500px;
+            height: 400px;
+            cursor: pointer;
+        }
+        
+        .card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
+            transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(50, 50, 93, 0.1), 0 5px 15px rgba(0, 0, 0, 0.07);
+        }
+        
+        .card:hover .card-inner {
+            transform: rotateY(10deg);
+        }
+        
+        .card.flipped .card-inner {
+            transform: rotateY(180deg);
+        }
+        
+        .card-front, .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 20px;
+            overflow: hidden;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .card-front {
+            background: linear-gradient(45deg, #3498db, #2c3e50);
+            color: white;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+        
+        .card-front h2 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .card-front .icon {
+            font-size: 5rem;
+            margin-bottom: 20px;
+            opacity: 0.8;
+        }
+        
+        .card-front .hint {
+            position: absolute;
+            bottom: 20px;
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        
+        .card-back {
+            background: white;
+            transform: rotateY(180deg);
+            overflow-y: auto;
+        }
+        
+        .card-back h3 {
+            color: #3498db;
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #f1f1f1;
+        }
+        
+        .card-back h4 {
+            color: #2c3e50;
+            margin: 15px 0 10px;
+            font-size: 1.3rem;
+        }
+        
+        .card-back ul, .card-back ol {
+            padding-left: 20px;
+            margin-bottom: 15px;
+        }
+        
+        .card-back li {
+            margin-bottom: 8px;
+        }
+        
+        .quote {
+            background: #f8f9fa;
+            border-left: 4px solid #3498db;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+            font-style: italic;
+        }
+        
+        .highlight {
+            background: linear-gradient(120deg, rgba(52, 152, 219, 0.2), transparent);
+            padding: 3px 5px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin: 40px 0 20px;
+            color: #2c3e50;
+            font-size: 1.8rem;
+            position: relative;
+        }
+        
+        .section-title:after {
+            content: '';
+            display: block;
+            width: 100px;
+            height: 3px;
+            background: #3498db;
+            margin: 10px auto;
+            border-radius: 3px;
+        }
+        
+        @media (max-width: 768px) {
+            .cards-container {
+                grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 2.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>语文知识要点精粹</h1>
+            <p class="subtitle">翻转卡片查看详细知识点，保留经典原文引用</p>
+        </header>
+        
+        <div class="section-title">文体与表达要素</div>
+        <div class="cards-container">
+            <div class="card" onclick="this.classList.toggle('flipped')">
+                <div class="card-inner">
+                    <div class="card-front">
+                        <div class="icon">📖</div>
+                        <h2>小说三要素</h2>
+                        <p class="hint">点击查看详情</p>
+                    </div>
+                    <div class="card-back">
+                        <h3>小说三要素</h3>
+                        <p>人物、情节、环境是构成小说的三大基本要素。</p>
+                        <h4>描写方法</h4>
+                        <ul>
+                            <li>外貌描写：刻画人物外部特征</li>
+                            <li>语言描写：通过对话展现人物性格</li>
+                            <li>动作描写：表现人物行为举止</li>
+                            <li>心理描写：揭示人物内心世界</li>
+                        </ul>
+                        <p>记忆口诀：<span class="highlight">"外语动心"</span></p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card" onclick="this.classList.toggle('flipped')">
+                <div class="card-inner">
+                    <div class="card-front">
+                        <div class="icon">✍️</div>
+                        <h2>议论文结构</h2>
+                        <p class="hint">点击查看详情</p>
+                    </div>
+                    <div class="card-back">
+                        <h3>议论文核心结构</h3>
+                        <h4>三要素</h4>
+                        <p>论点、论据、论证</p>
+                        
+                        <h4>结构类型</h4>
+                        <ul>
+                            <li><strong>问题导向：</strong>提出问题→分析问题→解决问题</li>
+                            <li><strong>观点导向：</strong>提出观点→论证观点→总结观点</li>
+                        </ul>
+                        
+                        <h4>论证方法</h4>
+                        <ul>
+                            <li>举例法</li>
+                            <li>对比法</li>
+                            <li>喻证法</li>
+                            <li>归谬法</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card" onclick="this.classList.toggle('flipped')">
+                <div class="card-inner">
+                    <div class="card-front">
+                        <div class="icon">🌸</div>
+                        <h2>诗歌规范</h2>
+                        <p class="hint">点击查看详情</p>
+                    </div>
+                    <div class="card-back">
+                        <h3>诗歌形式规范</h3>
+                        <h4>律诗四条件</h4>
+                        <ul>
+                            <li>八句四联（首联、颔联、颈联、尾联）</li>
+                            <li>偶句押韵</li>
+                            <li>中联对仗</li>
+                            <li>平仄合律</li>
+                        </ul>
+                        
+                        <h4>诗经六义</h4>
+                        <p><strong>内容分类：</strong></p>
+                        <ul>
+                            <li>风（民歌）</li>
+                            <li>雅（宫廷乐）</li>
+                            <li>颂（祭祀乐）</li>
+                        </ul>
+                        
+                        <p><strong>表现手法：</strong></p>
+                        <ul>
+                            <li>赋（直述）</li>
+                            <li>比（比喻）</li>
+                            <li>兴（起兴）</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="section-title">文学常识与经典作品</div>
+        <div class="cards-container">
+            <div class="card" onclick="this.classList.toggle('flipped')">
+                <div class="card-inner">
+                    <div class="card-front">
+                        <div class="icon">🏯</div>
+                        <h2>古代文学</h2>
+                        <p class="hint">点击查看详情</p>
+                    </div>
+                    <div class="card-back">
+                        <h3>中国古代文学</h3>
+                        <ul>
+                            <li><strong>先秦：</strong>《诗经》（现实主义源头），最早诗歌总集，"风骚"之"风"；屈原《离骚》（浪漫主义源头），首部个人抒情长诗，"骚体"开创者</li>
+                            <li><strong>汉代：</strong>《孔雀东南飞》，古代最长叙事诗，"乐府双璧"之一</li>
+                            <li><strong>建安时期：</strong>曹操《短歌行》、曹植"建安风骨"（慷慨悲凉）</li>
+                            <li><strong>东晋：</strong>陶渊明《归园田居》，田园诗派创始人</li>
+                            <li><strong>唐代：</strong>李白（浪漫）、杜甫（现实），"诗仙"与"诗圣"</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card" onclick="this.classList.toggle('flipped')">
+                <div class="card-inner">
+                    <div class="card-front">
+                        <div class="icon">📚</div>
+                        <h2>必背篇目</h2>
+                        <p class="hint">点击查看详情</p>
+                    </div>
+                    <div class="card-back">
+                        <h3>必背篇目精选</h3>
+                        <ul>
+                            <li><strong>必修一：</strong>《沁园春·长沙》（毛泽东）、《再别康桥》（徐志摩）</li>
+                            <li><strong>必修二：</strong>《氓》（诗经）、《兰亭集序》（王羲之）、《赤壁赋》（苏轼）</li>
+                        </ul>
+                        
+                        <h4>文言重点</h4>
+                        <ul>
+                            <li>《荆轲刺秦王》（背诵"易水送别"段）</li>
+                            <li>《鸿门宴》（司马迁）</li>
+                        </ul>
+                        
+                        <h4>经典名句示例</h4>
+                        <div class="quote">
+                            "路漫漫其修远兮，吾将上下而求索。"<br>——屈原《离骚》
+                        </div>
+                        <div class="quote">
+                            "老骥伏枥，志在千里；烈士暮年，壮心不已。"<br>——曹操《龟虽寿》
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="section-title">语言知识与文言核心</div>
+        <div class="cards-container">
+            <div class="card" onclick="this.classList.toggle('flipped')">
+                <div class="card-inner">
+                    <div class="card-front">
+                        <div class="icon">🔤</div>
+                        <h2>修辞手法</h2>
+                        <p class="hint">点击查看详情</p>
+                    </div>
+                    <div class="card-back">
+                        <h3>修辞手法</h3>
+                        <h4>八大主修</h4>
+                        <p>比喻、拟人、排比、夸张、设问、反问、对偶、反复</p>
+                        <p>记忆口诀：<span class="highlight">"喻拟排夸，二反设对"</span></p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card" onclick="this.classList.toggle('flipped')">
+                <div class="card-inner">
+                    <div class="card-front">
+                        <div class="icon">📜</div>
+                        <h2>文言现象</h2>
+                        <p class="hint">点击查看详情</p>
+                    </div>
+                    <div class="card-back">
+                        <h3>文言现象</h3>
+                        <h4>词类活用</h4>
+                        <ul>
+                            <li>名词作动词（e.g. "沛公军霸上"）</li>
+                            <li>使动用法（e.g. "项伯杀人，臣活之"）</li>
+                        </ul>
+                        
+                        <h4>古今异义</h4>
+                        <ul>
+                            <li>"行李之往来"（古：外交使者；今：行李）</li>
+                            <li>"婚姻"（古：亲家；今：夫妻关系）</li>
+                        </ul>
+                        
+                        <h4>通假字</h4>
+                        <ul>
+                            <li>"秦伯说"（通"悦"）</li>
+                            <li>"共其乏困"（通"供"）</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card" onclick="this.classList.toggle('flipped')">
+                <div class="card-inner">
+                    <div class="card-front">
+                        <div class="icon">🔍</div>
+                        <h2>虚词功能</h2>
+                        <p class="hint">点击查看详情</p>
+                    </div>
+                    <div class="card-back">
+                        <h3>虚词功能</h3>
+                        <ul>
+                            <li><strong>而：</strong>表修饰（e.g. 夜缒而出），连接状语与动词</li>
+                            <li><strong>以：</strong>表目的（e.g. 越国以鄙远），相当于"来"</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="section-title">写作与学习方法</div>
+        <div class="cards-container">
+            <div class="card" onclick="this.classList.toggle('flipped')">
+                <div class="card-inner">
+                    <div class="card-front">
+                        <div class="icon">🖋️</div>
+                        <h2>写作问题</h2>
+                        <p class="hint">点击查看详情</p>
+                    </div>
+                    <div class="card-back">
+                        <h3>写作常见问题</h3>
+                        <ul>
+                            <li>审题偏差</li>
+                            <li>结构松散</li>
+                            <li>素材空洞</li>
+                        </ul>
+                        
+                        <h4>解决策略</h4>
+                        <ul>
+                            <li>列提纲明确逻辑</li>
+                            <li>用具体事例替代空泛议论</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card" onclick="this.classList.toggle('flipped')">
+                <div class="card-inner">
+                    <div class="card-front">
+                        <div class="icon">📈</div>
+                        <h2>高效积累</h2>
+                        <p class="hint">点击查看详情</p>
+                    </div>
+                    <div class="card-back">
+                        <h3>高效积累路径</h3>
+                        <ul>
+                            <li><strong>文言文：</strong>每日精读1篇+重点虚词归纳</li>
+                            <li><strong>诗歌鉴赏：</strong>从意象、手法、情感三层次分析</li>
+                            <li><strong>作文素材库：</strong>按主题（e.g. 家国情怀、逆境成长）分类整理经典案例</li>
+                        </ul>
+                        
+                        <h4>备考提示</h4>
+                        <ul>
+                            <li><strong>工具推荐：</strong>使用"高中必背"APP（含朗读/注释功能）辅助文言文记忆</li>
+                            <li><strong>避坑指南：</strong>区分学术引用与作品原文引用，考试中后者需精确默写</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 添加卡片点击事件
+        document.querySelectorAll('.card').forEach(card => {
+            card.addEventListener('click', function() {
+                this.classList.toggle('flipped');
+            });
+        });
+    </script>
+</body>
+</html>
